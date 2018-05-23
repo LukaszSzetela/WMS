@@ -31,8 +31,9 @@ There are five user accounts present to demonstrate the different levels of acce
 ## Screenshots - web module
 ![Screenshot from running application](etc/screen1.png?raw=true "Screenshot WMS-App")
 ![Screenshot from running application](etc/screen2.png?raw=true "Screenshot WMS-App")
+![Screenshot from running application](etc/screen7.png?raw=true "Screenshot WMS-App")
 
 ## Screenshots - mobile module
 <img src="etc/screen3.png" width="300" height="500"> <img src="etc/screen4.png" width="300" height="500">
-<img src="etc/screen5.png" width="300" height="500">
-<img src="etc/screen6.png" width="300" height="500">
+<img src="etc/screen5.png" width="300" height="500"> <img src="etc/screen6.png" width="300" height="500">
+
