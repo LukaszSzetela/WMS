@@ -1,0 +1,88 @@
+<md-dialog aria-label="Add user" ng-controller="UserController as vm">
+
+    <growl-notification ng-if="vm.showSuccessAddedUser">
+        Added new user
+    </growl-notification>
+
+    <md-toolbar>
+        <div class="md-toolbar-tools">
+            <h2>Add user</h2>
+            <span flex></span>
+            <md-button class="md-icon-button" ng-click="vm.onCancelClick()">
+                <md-icon md-svg-src="img/ic_close_24px.svg" aria-label="Close dialog"></md-icon>
+            </md-button>
+        </div>
+    </md-toolbar>
+
+    <md-dialog-content ng-cloak>
+        <div class="md-dialog-content">
+            <form ng-submit="$event.preventDefault()" method="post" name="form" novalidate>
+                <input hidden type="number" name="userId" ng-model="vm.user.userId" required="">
+                <md-input-container>
+                    <label>First name</label>
+                    <input type="text" name="firstName" class="form-control " ng-model="vm.user.firstName"
+                           placeholder="First name" autofocus required="">
+                    <div ng-show="form.$submitted || form.firstName.$touched">
+                        <div ng-show="form.firstName.$error.required">Required</div>
+                    </div>
+                </md-input-container>
+                <md-input-container>
+                    <label>Last name</label>
+                    <input type="text" name="lastName" class="form-control" ng-model="vm.user.lastName"
+                           placeholder="Last name" autofocus required="">
+                    <div ng-show="form.$submitted || form.lastName.$touched">
+                        <div ng-show="form.lastName.$error.required">Required</div>
+                    </div>
+                </md-input-container>
+                <br>
+                <md-input-container>
+                    <label>Username</label>
+                    <input type="text" name="username" class="form-control" ng-model="vm.user.username"
+                           placeholder="Username" autofocus required="">
+                    <div ng-show="form.$submitted || form.username.$touched">
+                        <div ng-show="form.username.$error.required">Required</div>
+                    </div>
+                </md-input-container>
+                <md-input-container>
+                    <label>Password</label>
+                    <input type="password" name="password" class="form-control" ng-model="vm.user.password"
+                           placeholder="Password" autofocus required="">
+                    <div ng-show="form.$submitted || form.password.$touched">
+                        <div ng-show="form.password.$error.required">Required</div>
+                    </div>
+                </md-input-container>
+                <br>
+                <md-input-container>
+                    <label>Role</label>
+                    <md-select ng-model="vm.user.role">
+                        <md-option ng-repeat="role in vm.roles" ng-value="role">
+                            {{role}}
+                        </md-option>
+                    </md-select>
+                </md-input-container>
+                <md-input-container>
+                    <label>Active</label>
+                    <md-switch ng-model="vm.user.active" aria-label="isActive"></md-switch>
+                </md-input-container>
+                <br>
+                <md-input-container>
+                    <label>Email</label>
+                    <input type="email" name="email" class="form-control" ng-model="vm.user.email"
+                           placeholder="Email" autofocus required="">
+                    <div ng-show="form.$submitted || form.email.$touched">
+                        <div ng-show="form.email.$error.required">Required</div>
+                        <div ng-show="form.email.$error.email">Required</div>
+                    </div>
+                </md-input-container>
+            </form>
+        </div>
+    </md-dialog-content>
+
+    <md-dialog-actions>
+        <md-button aria-label="Finished" ng-click="vm.onCloseClick()">Cancel</md-button>
+        <md-button class="md-raised md-primary"
+               ng-click="vm.onSaveClick(vm.user)"
+               ng-disabled="form.firstName.$error.required || form.lastName.$error.required ||
+               form.username.$error.required || form.password.$error.required || form.email.$error.required">Create user</md-button>
+    </md-dialog-actions>
+</md-dialog>

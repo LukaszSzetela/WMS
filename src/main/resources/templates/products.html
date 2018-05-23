@@ -1,0 +1,139 @@
+<!Doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Warehouse Management System - bachelor's thesis">
+    <meta name="author" content="Łukasz Szetela">
+    <title>WMS</title>
+
+    <link rel="stylesheet" type="text/css" href="#" th:href="@{/webjars/bootstrap/3.3.7/css/bootstrap.css}"/>
+    <link rel="stylesheet" type="text/css" href="#" th:href="@{/webjars/bootstrap/3.3.7/css/bootstrap-theme.css}"/>
+    <link rel="stylesheet" type="text/css" href="#" th:href="@{/css/products.css}">
+    <link rel="stylesheet" type="text/css" href="#"
+          th:href="@{/webjars/angular-material/1.1.5/angular-material.min.css}">
+
+</head>
+<body ng-app="app">
+
+<growl-notifications></growl-notifications>
+
+<div ng-controller="ProductController as vm">
+
+
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
+                        aria-expanded="false" aria-controls="navbar">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="/products"><span
+                        class="glyphicon glyphicon-home"></span></a>
+                <a class="navbar-brand" name="cartProducts" href="" ng-click="vm.cart($event)"><span
+                        class="glyphicon glyphicon-shopping-cart"></span>
+                    <ngcart-summary></ngcart-summary>
+                </a>
+                <a class="navbar-brand" href="" name="orderLists" ng-controller="OrderController as orderCtrl"
+                   ng-click="orderCtrl.showOrderList($event)"><span
+                        class="	glyphicon glyphicon-th-list"></span></a>
+                <a class="navbar-brand" href="/logout"><span
+                        class="glyphicon glyphicon-log-out"></span></a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="row">
+
+
+            <form class="form-inline">
+                <div class="form-group">
+                    <label><span class="glyphicon glyphicon-search"></span></label>
+                    <input type="text" ng-model="search" class="form-control" placeholder="Search">
+                </div>
+            </form>
+
+
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                    <tr>
+                        <th hidden></th>
+                        <th ng-click="sort('category')">Category
+                            <span class="glyphicon sort-icon" ng-show="sortKey=='category'"
+                                  ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+                        </th>
+                        <th ng-click="sort('subcategory')">Subcategory
+                            <span class="glyphicon sort-icon" ng-show="sortKey=='subcategory'"
+                                  ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+                        </th>
+                        <th ng-click="sort('name')">Name
+                            <span class="glyphicon sort-icon" ng-show="sortKey=='name'"
+                                  ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+                        </th>
+                        <th ng-click="sort('price')">Price
+                            <span class="glyphicon sort-icon" ng-show="sortKey=='price'"
+                                  ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+                        </th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr dir-paginate="product in products|orderBy:sortKey:reverse|filter:search|itemsPerPage:20">
+                        <td hidden>{{::product.productId}}</td>
+                        <td>{{::product.category}}</td>
+                        <td>{{::product.subcategory}}</td>
+                        <td>{{::product.name}}</td>
+                        <td>{{::product.price}} PLN</td>
+                        <td>
+                            <ngcart-addtocart id="{{product.productId}}" name="{{product.name}}"
+                                              price="{{product.price}}"
+                                              quantity="1"
+                                              quantity-max="999">Add to Cart
+                            </ngcart-addtocart>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <dir-pagination-controls max-size="20"
+                                         boundary-links="true" first-text="first" direction-links="true"
+                                         last-text="last" rotate="true">
+                </dir-pagination-controls>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript" src="#" th:src="@{/webjars/angularjs/1.6.6/angular.js}"></script>
+<script type="text/javascript" src="#" th:src="@{/webjars/angularjs/1.6.6/angular-resource.js}"></script>
+<script type="text/javascript" src="#" th:src="@{/webjars/angularjs/1.6.6/angular-route.js}"></script>
+<script type="text/javascript" src="#" th:src="@{/webjars/angularjs/1.6.6/angular-messages.js}"></script>
+<script type="text/javascript" src="#" th:src="@{/webjars/angularjs/1.6.6/angular-sanitize.js}"></script>
+<script type="text/javascript" src="#" th:src="@{/webjars/angularjs/1.6.6/angular-animate.js}"></script>
+<script type="text/javascript" src="#" th:src="@{/webjars/angularjs/1.6.6/angular-aria.js}"></script>
+<script type="text/javascript" src="#" th:src="@{/webjars/angular-utils-pagination/0.11.1/dirPagination.js}"></script>
+<script type="text/javascript" src="#" th:src="@{/webjars/angular-material/1.1.5/angular-material.js}"></script>
+<script type="text/javascript" src="#" th:src="@{/webjars/jquery/3.2.1/jquery.js}"></script>
+<script type="text/javascript" src="#" th:src="@{/webjars/bootstrap/3.3.7/js/bootstrap.js}"></script>
+<script type="text/javascript" src="#" th:src="@{/bower_components/ngCart.js}"></script>
+<script type="text/javascript" src="#" th:src="@{/bower_components/angular-growl-notifications.js}"></script>
+<script type="text/javascript" src="#" th:src="@{/js/app.js}"></script>
+<script type="text/javascript" src="#" th:src="@{/js/products/ProductController.js}"></script>
+<script type="text/javascript" src="#" th:src="@{/js/products/ProductService.js}"></script>
+<script type="text/javascript" src="#" th:src="@{/js/users/UserController.js}"></script>
+<script type="text/javascript" src="#" th:src="@{/js/users/UserService.js}"></script>
+<script type="text/javascript" src="#" th:src="@{/js/carts/CustomerCartController.js}"></script>
+<script type="text/javascript" src="#" th:src="@{/js/dialogs/DialogService.js}"></script>
+<script type="text/javascript" src="#" th:src="@{/js/orders/OrderController.js}"></script>
+<script type="text/javascript" src="#" th:src="@{/js/orders/OrderService.js}"></script>
+<script type="text/javascript" src="#" th:src="@{/js/orders/OrderFilter.js}"></script>
+
+</body>
+</html>

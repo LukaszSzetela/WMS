@@ -1,0 +1,92 @@
+<md-dialog aria-label="Verify order" ng-controller="OrderController as vm">
+
+    <growl-notification ng-show="vm.showSuccessAcceptOrder">
+        Order {{pOCtrl.order.id}} accepted
+    </growl-notification>
+
+    <growl-notification ng-show="vm.showSuccessCancelOrder">
+        Order {{pOCtrl.order.id}} canceled
+    </growl-notification>
+
+    <growl-notification ng-show="vm.showSuccessDelayOrder">
+        Verification order {{pOCtrl.order.id}} postponed
+    </growl-notification>
+
+    <md-toolbar>
+        <div class="md-toolbar-tools">
+            <h2>Verify Order</h2>
+            <span flex></span>
+            <md-button class="md-icon-button" ng-click="vm.onCloseClick()">
+                <md-icon md-svg-src="img/ic_close_24px.svg" aria-label="Close dialog"></md-icon>
+            </md-button>
+        </div>
+    </md-toolbar>
+
+    <md-dialog-content ng-cloak>
+        <div class="md-dialog-content">
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th>
+                            <span class="glyphicon glyphicon-bookmark">
+                                <md-tooltip>
+                                    Id
+                                </md-tooltip>
+                            </span>
+                    </th>
+                    <th >
+                            <span class="glyphicon glyphicon-stats">
+                                <md-tooltip>
+                                    Name
+                                </md-tooltip>
+                            </span>
+                    </th>
+                    <th>
+                            <span class="glyphicon glyphicon-list-alt">
+                                <md-tooltip>
+                                    Number
+                                </md-tooltip>
+                            </span>
+                    </th>
+                    <th>
+                           <span class="glyphicon glyphicon-folder-open">
+                                <md-tooltip>
+                                    In stock
+                                </md-tooltip>
+                            </span>
+                    </th>
+                    <th>
+                           <span class="glyphicon glyphicon-king">
+                                <md-tooltip>
+                                    Verification
+                                </md-tooltip>
+                            </span>
+                    </th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="product in pOCtrl.order.products">
+                    <td>{{::product.productId}}</td>
+                    <td>{{::product.name}}</td>
+                    <td>{{::product.number}}</td>
+                    <td>{{::product.inStock}}</td>
+                    <td>
+                        <span class="{{product.number > product.inStock ? 'verify glyphicon glyphicon-remove-sign' : 'verify glyphicon glyphicon-ok-sign'}}"></span>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+
+            <label>Current status: {{::pOCtrl.order.status}}</label><br>
+            <label>Total cost: {{::pOCtrl.order.totalCost}}</label><br>
+
+        </div>
+    </md-dialog-content>
+
+    <md-dialog-actions>
+        <md-button name="cancelOrder" class="md-raised md-warn" ng-click="vm.processOrder($event, pOCtrl.order, true)">Cancel</md-button>
+        <md-button name="delayOrder" class="md-raised" ng-disabled="pOCtrl.order.status === 'Accepted' || pOCtrl.order.status === 'Cancelled'" ng-click="vm.processOrder($event, pOCtrl.order, true)">Delay</md-button>
+        <md-button name="acceptOrder" class="md-raised md-primary" ng-disabled="!pOCtrl.order.verification || pOCtrl.order.status === 'Accepted'" ng-click="vm.processOrder($event, pOCtrl.order, true)">Accept</md-button>
+    </md-dialog-actions>
+</md-dialog>
+

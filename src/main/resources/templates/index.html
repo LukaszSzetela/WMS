@@ -1,0 +1,357 @@
+<!Doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Warehouse Management System - bachelor's thesis">
+    <meta name="author" content="Łukasz Szetela">
+    <title>WMS</title>
+
+    <link rel="stylesheet" type="text/css" href="#" th:href="@{/webjars/bootstrap/3.3.7/css/bootstrap.css}"/>
+    <link rel="stylesheet" type="text/css" href="#" th:href="@{/webjars/bootstrap/3.3.7/css/bootstrap-theme.css}"/>
+    <link rel="stylesheet" type="text/css" href="#" th:href="@{/css/style.css}">
+    <link rel="stylesheet" type="text/css" href="#"
+          th:href="@{/webjars/angular-material/1.1.5/angular-material.min.css}">
+
+</head>
+<body ng-app="app">
+
+<growl-notifications></growl-notifications>
+
+<nav class="navbar navbar-inverse navbar-fixed-top" ng-controller="UserController as vm">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed mobile-version-hide" data-toggle="collapse"
+                    data-target="#navbar"
+                    aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand mobile-version-hide" href="/"><span
+                    class="glyphicon glyphicon-home"></span></a>
+            <a class="navbar-brand mobile-version-show" href="/"><span
+                    class="glyphicon glyphicon-phone"></span></a>
+            <a class="navbar-brand" href="/logout"><span
+                    class="glyphicon glyphicon-log-out"></span></a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li ng-show="vm.userProps.role !== 'Warehouseman'" class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                       aria-expanded="false">Options<span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="" name="addCustomer" ng-click="vm.addCustomerForm($event)"
+                               sec:authorize="hasAnyAuthority('Admin','Office')">Add customer</a></li>
+                        <li><a href="" name="editCustomer" ng-click="vm.editCustomerForm($event)"
+                               sec:authorize="hasAnyAuthority('Admin','Office')">Edit customer</a></li>
+                        <li role="separator" class="divider" sec:authorize="hasAnyAuthority('Admin')"></li>
+                        <li class="dropdown-header" sec:authorize="hasAnyAuthority('Admin')">Admin panel</li>
+                        <li><a href="" name="addUser" ng-click="vm.addUserForm($event)"
+                               sec:authorize="hasAnyAuthority('Admin')">Add user</a></li>
+                        <li><a href="" name="editUser" ng-click="vm.editUserForm($event)"
+                               sec:authorize="hasAnyAuthority('Admin')">Edit user</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container-fluid" ng-controller="OrderController as vm">
+    <div class="row">
+
+        <div class="col-sm-3 col-md-2 sidebar" sec:authorize="hasAnyAuthority('Admin','Office')">
+            <ul class="nav nav-sidebar">
+                <li><a href="" name="printOrders" ng-click="vm.printOrders($event)">Orders by statuses</a></li>
+                <li><a href="" name="exportOrdersByUser" ng-click="vm.printOrdersByUsers($event)">Orders by user</a></li>
+                <li><a href="" name="exportOrdersByDatesInRange" ng-click="vm.printOrdersByDatesInRange($event)">Orders
+                    by date range</a></li>
+            </ul>
+            <ul class="nav nav-sidebar">
+                <li><a href="/ordersPerCurrentDay">Orders per current day</a></li>
+                <li><a href="/ordersPerCurrentWeek">Orders per current week</a></li>
+                <li><a href="/ordersPerCurrentMonth">Orders per current month</a></li>
+                <li><a href="/ordersPerCurrentQuarter">Orders per current quarter</a></li>
+                <li><a href="/ordersPerCurrentYear">Orders per current year</a></li>
+            </ul>
+            <ul class="nav nav-sidebar">
+                <li><a href="" name="exportSalesByProduct" ng-click="vm.printSalesByProduct($event)">Sales by products</a></li>
+                <li><a href="" name="exportSalesByDatesInRange" ng-click="vm.printProductsByDatesInRange($event)">Sales by date range</a></li>
+                <li><a href="/shortagesReport">Shortages report</a></li>
+            </ul>
+        </div>
+
+        <div class="{{vm.userProps.role !== 'Warehouseman' ? 'col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main' :
+        'col-sm-12 col-md-12  main'}}">
+            <div class="table-responsive mobile-version-hide">
+                <table class="table borderless">
+                    <thead>
+                    <tr>
+                        <th>
+                            <div class="col-xs-6 col-sm-3 placeholder">
+                                <button name="orderLists" ng-click="vm.showOrderList($event)" class="icons order">
+                                    <md-tooltip>
+                                        Order list
+                                    </md-tooltip>
+                                </button>
+                            </div>
+                        </th>
+                        <th>
+                            <div class="col-xs-6 col-sm-3 placeholder">
+                                <button name="realizeOrders" ng-click="vm.showRealizeOrderList($event)"
+                                        class="icons stock">
+                                    <md-tooltip>
+                                        Realized orders
+                                    </md-tooltip>
+                                </button>
+                            </div>
+                        </th>
+                        <th>
+                            <div class="col-xs-6 col-sm-3 placeholder">
+                                <button ng-click="showProductsSearch()" class="icons location">
+                                    <md-tooltip>
+                                        Search
+                                    </md-tooltip>
+                                </button>
+                            </div>
+                        </th>
+                        <th>
+                            <div class="col-xs-6 col-sm-3 placeholder">
+                                <button name="completedOrders" ng-click="vm.showCompletedOrdersList($event)"
+                                        class="icons shortage">
+                                    <md-tooltip>
+                                        Completed orders
+                                    </md-tooltip>
+                                </button>
+                            </div>
+                        </th>
+                    </tr>
+                    </thead>
+                </table>
+            </div>
+
+            <section class="mobile-version-show" ng-show="!vm.flagCurrent && !vm.flagYourOrders">
+                <button id="showCurrentOrder" class="btn btn-lg btn-primary btn-block"
+                        ng-click="vm.showCurrentOrder($event)">Current Order
+                </button>
+                <button id="showYourOrders" class="btn btn-lg btn-primary btn-block"
+                        ng-click="vm.showYourOrders($event)">Your orders
+                </button>
+            </section>
+
+            <div class="alert alert-info" ng-show="vm.flagCurrent && vm.currentOrder.products.length === 0">
+                <strong>No current order.</strong>
+            </div>
+
+            <div class="mobile-version-show" ng-show="vm.flagCurrent">
+                <table class="table table-hover" ng-show="vm.currentOrder.products.length > 0">
+                    <thead>
+                    <tr>
+                        <th hidden></th>
+                        <th>
+                            <span class="glyphicon glyphicon-bookmark">
+                                <md-tooltip class="mobile-version-hide">
+                                    Id
+                                </md-tooltip>
+                            </span>
+                        </th>
+                        <th>
+                            <span class="glyphicon glyphicon-stats">
+                                <md-tooltip class="mobile-version-hide">
+                                    Name
+                                </md-tooltip>
+                            </span>
+                        </th>
+                        <th>
+                           <span class="glyphicon glyphicon-king">
+                                <md-tooltip class="mobile-version-hide">
+                                    Verification
+                                </md-tooltip>
+                            </span>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="product in vm.currentOrder.products">
+                        <td hidden ng-model="product.ordinal">{{product.ordinal}}</td>
+                        <td ng-model="product.productId">{{product.productId}}</td>
+                        <td ng-model="product.name">{{product.name}}</td>
+                        <td>
+                            <md-checkbox md-no-ink aria-label="Checkbox No Ink" ng-model="product.isComplete"
+                                         class="md-primary"
+                                         ng-click="vm.onCompleteClick(product.ordinal, product.productId, product.isComplete, vm.currentOrder.id)"></md-checkbox>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td hidden>{{vm.currentOrder.id}}</td>
+                        <td></td>
+                        <td></td>
+                        <td>
+                            <md-checkbox md-no-ink aria-label="Checkbox No Ink" ng-model="vm.isOrderComplete"
+                                         class="md-primary"
+                                         ng-click="vm.checkIfOrderCompleted(vm.currentOrder.id, vm.isOrderComplete)"></md-checkbox>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <br>
+            </div>
+
+            <div class="mobile-version-show" ng-show="vm.flagYourOrders">
+                <table class="table table-hover">
+                    <thead>
+                    <tr>
+                        <th>
+                            <span class="glyphicon glyphicon-bookmark">
+                                <md-tooltip class="mobile-version-hide">
+                                    Id
+                                </md-tooltip>
+                            </span>
+                        </th>
+                        <th>
+                            <span class="glyphicon glyphicon-stats">
+                                <md-tooltip class="mobile-version-hide">
+                                    Status
+                                </md-tooltip>
+                            </span>
+                        </th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="order in vm.orders | executorAndStatuses: 'Assigned' : 'Realize' : 'Pause' : vm.userProps.userId">
+                        <td>{{order.id}}</td>
+                        <td>{{order.status}}</td>
+                        <td>
+                            <button name="{{order.status === 'Realize' ? 'pauseOrder' : 'realizeOrder'}}"
+                                    class="btn btn-xs {{order.status === 'Realize' ? 'btn-primary' : 'btn-success'}} btn-block mobile-version-show"
+                                    ng-click="vm.processOrder($event, order, false, vm.currentOrder)">{{order.status ===
+                                'Realize' ? 'Pause' : 'Realize'}}
+                            </button>
+
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <button class="btn btn-xs btn-primary btn-block mobile-version-show"
+                    ng-click="vm.backToMobileButtons($event)" ng-show="vm.flagYourOrders || vm.flagCurrent">Back
+            </button>
+            <button class="btn btn-xs btn-success btn-block mobile-version-show" name="finishOrder"
+                    ng-click="vm.processOrder($event, vm.currentOrder, false, vm.currentOrder)"
+                    ng-show="vm.isOrderComplete && vm.flagCurrent">Complete
+            </button>
+
+            <form class="form-inline" ng-show="myVar">
+                <div class="form-group">
+                    <label><span class="glyphicon glyphicon-search"></span></label>
+                    <input type="text" ng-model="search" class="form-control" placeholder="Search">
+                </div>
+            </form>
+
+
+            <div class="table-responsive mobile-version-hide" ng-controller="ProductController as vm">
+                <table class="table table-hover">
+                    <thead>
+                    <tr>
+                        <th ng-click="sort('category')">Category
+                            <span class="glyphicon sort-icon" ng-show="sortKey=='category'"
+                                  ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+                        </th>
+                        <th ng-click="sort('subcategory')">Subcategory
+                            <span class="glyphicon sort-icon" ng-show="sortKey=='subcategory'"
+                                  ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+                        </th>
+                        <th ng-click="sort('name')">Name
+                            <span class="glyphicon sort-icon" ng-show="sortKey=='name'"
+                                  ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+                        </th>
+                        <th ng-click="sort('number')">Number
+                            <span class="glyphicon sort-icon" ng-show="sortKey=='number'"
+                                  ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+                        </th>
+                        <th></th>
+                        <th ng-show="vm.userProps.role !== 'Warehouseman'">
+                            <md-button name="addProduct" ng-click="vm.showAddProduct($event)" class="md-raised">Add
+                                Product
+                            </md-button>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr dir-paginate="product in products|orderBy:sortKey:reverse|filter:search|itemsPerPage:25 track by $index">
+                        <td>{{product.category}}</td>
+                        <td>{{product.subcategory}}</td>
+                        <td>{{product.name}}</td>
+                        <td>{{product.number + product.reservedNumber}}
+                            <a href="" name="infoProduct" ng-click="vm.infoProduct($event, product.productId, product.number, product.reservedNumber)">
+                                <span class="glyphicon glyphicon-info-sign">
+                                    <md-tooltip>
+                                    Product Details
+                                    </md-tooltip>
+                                </span>
+                            </a>
+                        </td>
+                        <td></td>
+                        <td ng-show="vm.userProps.role !== 'Warehouseman'">
+                            <md-button name="increaseNumber" ng-click="vm.showIncreaseNumberProduct($event)"
+                                       class="md-raised md-primary">Add
+                            </md-button>
+                            <md-input-container style="display: none">
+                                <input type="number" name="number" class="increaseNumber"
+                                       ng-model="number"
+                                       placeholder="Number" autofocus required="">
+                                <div ng-show="form.$submitted || form.number.$touched">
+                                    <div ng-show="form.number.$error.required">Required</div>
+                                </div>
+                            </md-input-container>
+                            <mark style="display: none">
+                                <span ng-click="vm.backToAddButton($event)" class="increaseNumber glyphicon glyphicon-remove"></span>
+                            </mark>
+                            <mark style="display: none">
+                                <span ng-click="vm.increaseNumberProduct($event, product, number)" class="increaseNumber glyphicon glyphicon-ok"></span>
+                            </mark>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <dir-pagination-controls max-size="20"
+                                         boundary-links="true" first-text="first" direction-links="true"
+                                         last-text="last" rotate="true">
+                </dir-pagination-controls>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript" src="#" th:src="@{/webjars/angularjs/1.6.6/angular.js}"></script>
+<script type="text/javascript" src="#" th:src="@{/webjars/angularjs/1.6.6/angular-resource.js}"></script>
+<script type="text/javascript" src="#" th:src="@{/webjars/angularjs/1.6.6/angular-route.js}"></script>
+<script type="text/javascript" src="#" th:src="@{/webjars/angularjs/1.6.6/angular-messages.js}"></script>
+<script type="text/javascript" src="#" th:src="@{/webjars/angularjs/1.6.6/angular-sanitize.js}"></script>
+<script type="text/javascript" src="#" th:src="@{/webjars/angularjs/1.6.6/angular-animate.js}"></script>
+<script type="text/javascript" src="#" th:src="@{/webjars/angularjs/1.6.6/angular-aria.js}"></script>
+<script type="text/javascript" src="#" th:src="@{/webjars/angular-utils-pagination/0.11.1/dirPagination.js}"></script>
+<script type="text/javascript" src="#" th:src="@{/webjars/angular-material/1.1.5/angular-material.js}"></script>
+<script type="text/javascript" src="#" th:src="@{/webjars/jquery/3.2.1/jquery.js}"></script>
+<script type="text/javascript" src="#" th:src="@{/webjars/bootstrap/3.3.7/js/bootstrap.js}"></script>
+<script type="text/javascript" src="#" th:src="@{/bower_components/ngCart.js}"></script>
+<script type="text/javascript" src="#" th:src="@{/bower_components/angular-growl-notifications.js}"></script>
+<script type="text/javascript" src="#" th:src="@{/js/app.js}"></script>
+<script type="text/javascript" src="#" th:src="@{/js/products/ProductController.js}"></script>
+<script type="text/javascript" src="#" th:src="@{/js/products/ProductService.js}"></script>
+<script type="text/javascript" src="#" th:src="@{/js/users/UserController.js}"></script>
+<script type="text/javascript" src="#" th:src="@{/js/users/UserService.js}"></script>
+<script type="text/javascript" src="#" th:src="@{/js/carts/CustomerCartController.js}"></script>
+<script type="text/javascript" src="#" th:src="@{/js/dialogs/DialogService.js}"></script>
+<script type="text/javascript" src="#" th:src="@{/js/orders/OrderController.js}"></script>
+<script type="text/javascript" src="#" th:src="@{/js/orders/OrderService.js}"></script>
+<script type="text/javascript" src="#" th:src="@{/js/orders/OrderFilter.js}"></script>
+
+</body>
+</html>

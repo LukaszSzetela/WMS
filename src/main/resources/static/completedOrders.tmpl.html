@@ -1,0 +1,61 @@
+<md-dialog aria-label="Completed orders" ng-controller="OrderController as vm"
+           xmlns:status="http://www.w3.org/1999/xhtml">
+
+    <md-toolbar>
+        <div class="md-toolbar-tools">
+            <h2>Completed orders</h2>
+            <span flex></span>
+            <md-button class="md-icon-button" ng-click="vm.onCloseClick()">
+                <md-icon md-svg-src="img/ic_close_24px.svg" aria-label="Close dialog"></md-icon>
+            </md-button>
+        </div>
+    </md-toolbar>
+
+    <md-dialog-content ng-cloak>
+        <div class="md-dialog-content">
+
+            <div class="table-responsive" ng-show="vm.userProps.role !== 'Customer'">
+                <table class="table table-hover">
+                    <thead>
+                    <tr>
+                        <th class="glyphicons">
+                            <span class="glyphicon glyphicon-bookmark">
+                                <md-tooltip>
+                                    Id
+                                </md-tooltip>
+                            </span>
+                        </th>
+                        <th class="glyphicons">
+                            <span class="glyphicon glyphicon-stats">
+                                <md-tooltip>
+                                    Status
+                                </md-tooltip>
+                            </span>
+                        </th>
+                        <th class="glyphicons">
+                            <span class="glyphicon glyphicon-hourglass">
+                                <md-tooltip>
+                                    Duration of picking
+                                </md-tooltip>
+                            </span>
+                        </th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="order in vm.orders | statusWithoutRole: 'Completed'">
+                        <td>{{::order.id}}</td>
+                        <td>{{::order.status}}</td>
+                        <td>{{::order.pickingTime}}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </md-dialog-content>
+
+    <md-dialog-actions>
+        <md-button class="md-raised" ng-click="vm.onCloseClick()">Close</md-button>
+    </md-dialog-actions>
+</md-dialog>

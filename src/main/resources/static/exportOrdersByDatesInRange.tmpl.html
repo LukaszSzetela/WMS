@@ -1,0 +1,49 @@
+<md-dialog aria-label="Export orders by  dates in range" ng-controller="OrderController as vm">
+
+    <md-toolbar>
+        <div class="md-toolbar-tools">
+            <h2>Export orders by date range</h2>
+            <span flex></span>
+            <md-button class="md-icon-button" ng-click="vm.onCloseClick()">
+                <md-icon md-svg-src="img/ic_close_24px.svg" aria-label="Close dialog"></md-icon>
+            </md-button>
+        </div>
+    </md-toolbar>
+
+    <md-dialog-content ng-cloak>
+        <div class="md-dialog-content">
+            <form name="datesForm" flex-gt-xs>
+                <md-input-container>
+                    <label>Date from</label>
+                    <md-datepicker ng-model="vm.dateFrom" name="dateFrom" md-min-date="vm.minDate"
+                                   md-max-date="vm.dateTo"></md-datepicker>
+
+                    <div ng-messages="datesForm.dateFrom.$error">
+                        <div ng-message="valid">Use a valid date format</div>
+                        <div ng-message="mindate">Choose a date on or after {{vm.minDate | date:"shortDate"}}</div>
+                        <div ng-message="maxdate">Choose a date on or before {{vm.dateTo | date:"shortDate"}}</div>
+                    </div>
+                </md-input-container>
+
+                <md-input-container>
+                    <label>Date to</label>
+                    <md-datepicker ng-model="vm.dateTo" name="dateTo" md-min-date="vm.dateFrom"
+                                   md-max-date="vm.maxDate"></md-datepicker>
+
+                    <div ng-messages="datesForm.dateTo.$error">
+                        <div ng-message="valid">Use a valid date format</div>
+                        <div ng-message="mindate">Choose a date on or after {{vm.dateFrom | date:"shortDate"}}</div>
+                        <div ng-message="maxdate">Choose a date on or before {{vm.maxDate | date:"shortDate"}}</div>
+                    </div>
+                </md-input-container>
+            </form>
+        </div>
+    </md-dialog-content>
+
+    <md-dialog-actions>
+        <md-button class="md-raised md-primary"
+                   ng-disabled="form.dateFrom.$error|| form.dateTo.$error"
+                   ng-click="vm.exportOrdersByDatesInRange(vm.dateFrom, vm.dateTo)">Print
+        </md-button>
+    </md-dialog-actions>
+</md-dialog>

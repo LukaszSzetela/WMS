@@ -1,0 +1,41 @@
+<md-dialog aria-label="Export orders by user" ng-controller="UserController as vm">
+
+    <md-toolbar>
+        <div class="md-toolbar-tools">
+            <h2>Export orders by user</h2>
+            <span flex></span>
+            <md-button class="md-icon-button" ng-click="vm.onCancelClick()">
+                <md-icon md-svg-src="img/ic_close_24px.svg" aria-label="Close dialog"></md-icon>
+            </md-button>
+        </div>
+    </md-toolbar>
+
+    <md-dialog-content ng-cloak>
+        <div class="md-dialog-content">
+            <form ng-submit="$event.preventDefault()">
+                <md-autocomplete
+                        md-selected-item="vm.selectedItem"
+                        md-search-text="vm.searchText"
+                        md-items="user in vm.querySearch(vm.searchText)"
+                        md-item-text="user"
+                        md-min-length="0"
+                        placeholder="Choose user to export"
+                        md-autofocus>
+                    <md-item-template>
+                        <span md-highlight-text="vm.searchText" md-highlight-flags="^i">{{user}}</span>
+                    </md-item-template>
+                    <md-not-found>
+                        No user matching "{{vm.searchText}}" were found.
+                    </md-not-found>
+                </md-autocomplete>
+            </form>
+        </div>
+    </md-dialog-content>
+
+    <md-dialog-actions>
+        <md-button class="md-raised md-primary"
+                   ng-disabled="!vm.selectedItem"
+                   ng-click="vm.exportOrdersByUser(vm.selectedItem)">Print
+        </md-button>
+    </md-dialog-actions>
+</md-dialog>

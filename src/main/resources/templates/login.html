@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta name="description" content=""/>
+    <meta name="author" content=""/>
+
+    <title>WMS</title>
+
+    <link rel="stylesheet" type="text/css" href="#" th:href="@{/webjars/bootstrap/3.3.7/css/bootstrap.css}"/>
+    <link rel="stylesheet" type="text/css" href="#" th:href="@{/webjars/bootstrap/3.3.7/css/bootstrap-theme.css}"/>
+    <script type="text/javascript" src="#" th:src="@{/webjars/jquery/3.2.1/jquery.js}"></script>
+    <script type="text/javascript" src="#" th:src="@{/webjars/bootstrap/3.3.7/js/bootstrap.min.js}"></script>
+    <link rel="stylesheet" type="text/css" href="#" th:href="@{/css/login.css}">
+
+</head>
+
+<body>
+
+<div class="container">
+    <form class="form-signin" th:action="@{/login}" method="post">
+        <fieldset>
+            <div th:if="${param.error}">
+                <div class="alert alert-danger alert-dismissable">
+                    <a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>
+                    Invalid username and password.
+                </div>
+            </div>
+            <div th:if="${param.logout}">
+                <div class="alert alert-info alert-dismissable">
+                    <a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>
+                    You have been logged out.
+                </div>
+            </div>
+            <div class="logo space"></div>
+            <label class="sr-only">Login</label>
+            <input type="text" class="form-control" placeholder="Login" name="username" id="username" required
+                   autofocus>
+            <label class="sr-only">Password</label>
+            <input type="password" class="form-control" placeholder="Password" name="password" id="password" required>
+            <input class="btn btn-lg btn-primary btn-block" type="submit" value="Sign in"/>
+        </fieldset>
+    </form>
+</div>
+
+
+</body>
+</html>

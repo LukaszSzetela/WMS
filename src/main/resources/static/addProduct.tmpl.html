@@ -1,0 +1,80 @@
+<md-dialog aria-label="Add product">
+
+    <growl-notification ng-if="vm.parent.showSuccessAddedProduct">
+        Added new product
+    </growl-notification>
+
+    <md-toolbar>
+        <div class="md-toolbar-tools">
+            <h2>Add Product</h2>
+            <span flex></span>
+            <md-button class="md-icon-button" ng-click="vm.parent.onCloseClick()">
+                <md-icon md-svg-src="img/ic_close_24px.svg" aria-label="Close dialog"></md-icon>
+            </md-button>
+        </div>
+    </md-toolbar>
+
+    <md-dialog-content ng-cloak>
+        <div class="md-dialog-content">
+            <form ng-submit="$event.preventDefault()" method="post" name="form" novalidate>
+                <md-input-container>
+                    <label>Name</label>
+                    <input type="text" name="name" class="form-control" ng-model="vm.parent.product.name"
+                           placeholder="Name" autofocus required="">
+                    <div ng-show="form.$submitted || form.name.$touched">
+                        <div ng-show="form.name.$error.required">Required</div>
+                    </div>
+                </md-input-container>
+                <md-input-container>
+                    <label>Category</label>
+                    <input type="text" name="category" class="form-control" ng-model="vm.parent.product.category"
+                           placeholder="Category" autofocus required="">
+                    <div ng-show="form.$submitted || form.category.$touched">
+                        <div ng-show="form.category.$error.required">Required</div>
+                    </div>
+                </md-input-container>
+                <br>
+                <md-input-container>
+                    <label>Subcategory</label>
+                    <input type="text" name="subcategory" class="form-control" ng-model="vm.parent.product.subcategory"
+                           placeholder="Subcategory" autofocus required="">
+                    <div ng-show="form.$submitted || form.subcategory.$touched">
+                        <div ng-show="form.subcategory.$error.required">Required</div>
+                    </div>
+                </md-input-container>
+                <md-input-container>
+                    <label>Delivery time</label>
+                    <input type="number" name="deliveryTime" class="form-control" ng-model="vm.parent.product.deliveryTime"
+                           placeholder="Delivery time" autofocus required="">
+                    <div ng-show="form.$submitted || form.deliveryTime.$touched">
+                        <div ng-show="form.deliveryTime.$error.required">Required</div>
+                    </div>
+                </md-input-container>
+                <br>
+                <md-input-container>
+                    <label>Number</label>
+                    <input type="number" name="number" class="form-control" ng-model="vm.parent.product.number"
+                           placeholder="Number" autofocus required="" min="1">
+                    <div ng-show="form.$submitted || form.number.$touched">
+                        <div ng-show="form.number.$error.required">Required</div>
+                    </div>
+                </md-input-container>
+                <md-input-container>
+                    <label>Price</label>
+                    <input type="number" name="price" class="form-control" ng-model="vm.parent.product.price"
+                           placeholder="Number" autofocus required="" min="0.01" step="0.01">
+                    <div ng-show="form.$submitted || form.price.$touched">
+                        <div ng-show="form.price.$error.required">Required</div>
+                    </div>
+                </md-input-container>
+            </form>
+        </div>
+    </md-dialog-content>
+
+    <md-dialog-actions>
+        <md-button class="md-raised md-primary"
+               ng-click="vm.parent.onSaveClick(vm.parent.product)"
+               ng-disabled="form.name.$error.required || form.category.$error.required ||
+               form.subcategory.$error.required || form.deliveryTime.$error.required || form.number.$error.required || form.price.$error.required">Create product</md-button>
+    </md-dialog-actions>
+</md-dialog>

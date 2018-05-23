@@ -1,0 +1,28 @@
+<md-dialog aria-label="Info product" ng-controller="ProductController as vm">
+
+    <md-toolbar>
+        <div class="md-toolbar-tools">
+            <h2>Product info</h2>
+            <span flex></span>
+            <md-button class="md-icon-button" ng-click="vm.onCloseClick()">
+                <md-icon md-svg-src="img/ic_close_24px.svg" aria-label="Close dialog"></md-icon>
+            </md-button>
+        </div>
+    </md-toolbar>
+
+    <md-dialog-content ng-cloak>
+        <div class="md-dialog-content">
+
+            Current Number: <span class="label label-info">{{::detailsCtrl.number}}</span><br>
+            Reserved Number: <span class="label label-info">{{::detailsCtrl.reservedNumber}}</span><br>
+            Minimum inventory level: <span class="label label-warning">{{::detailsCtrl.productDetails.zb}}</span><br>
+            Reordel level: <span class="label label-info">{{::detailsCtrl.productDetails.zi}}</span><br>
+            Last year's demand this week: <span class="label label-info">{{::detailsCtrl.stockInRange.demand}}</span>
+
+        </div>
+    </md-dialog-content>
+
+    <md-dialog-actions>
+        <md-button class="md-raised" ng-click="vm.onCloseClick()">Close</md-button>
+    </md-dialog-actions>
+</md-dialog>

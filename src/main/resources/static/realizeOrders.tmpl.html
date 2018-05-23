@@ -1,0 +1,136 @@
+<md-dialog id="realizeOrders" aria-label="Realize orders" ng-controller="OrderController as vm">
+
+    <growl-notification ng-if="vm.showSuccessCompletedOrder">
+        Order {{vm.numberProcessingOrder}} is completed
+    </growl-notification>
+
+        <md-toolbar>
+            <div class="md-toolbar-tools">
+                <h2>Realizing orders</h2>
+                <span flex></span>
+                <md-button class="md-icon-button" ng-click="vm.onCloseClick()">
+                    <md-icon md-svg-src="img/ic_close_24px.svg" aria-label="Close dialog"></md-icon>
+                </md-button>
+            </div>
+        </md-toolbar>
+        <md-dialog-content style="max-width:800px;max-height:810px; ">
+            <md-tabs md-dynamic-height md-border-bottom>
+
+
+                <md-tab label="Current order" id="currentOrder">
+                    <md-content class="md-padding">
+                        <div class="table-responsive">
+                            <table class="table table-hover" ng-if="vm.currentOrder.products.length > 0">
+                                <thead>
+                                <tr>
+                                    <th hidden></th>
+                                    <th>
+                            <span class="glyphicon glyphicon-bookmark">
+                                <md-tooltip class="mobile-version-hide">
+                                    Id
+                                </md-tooltip>
+                            </span>
+                                    </th>
+                                    <th>
+                            <span class="glyphicon glyphicon-stats">
+                                <md-tooltip class="mobile-version-hide">
+                                    Name
+                                </md-tooltip>
+                            </span>
+                                    </th>
+                                    <th>
+                           <span class="glyphicon glyphicon-king">
+                                <md-tooltip class="mobile-version-hide">
+                                    Verification
+                                </md-tooltip>
+                            </span>
+                                    </th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr ng-repeat="product in vm.currentOrder.products">
+                                    <td hidden ng-model="product.ordinal">{{product.ordinal}}</td>
+                                    <td ng-model="product.productId">{{product.productId}}</td>
+                                    <td ng-model="product.name">{{product.name}}</td>
+                                    <td>
+                                        <md-checkbox md-no-ink aria-label="Checkbox No Ink" ng-model="product.isComplete"
+                                                     class="md-primary"
+                                                     ng-click="vm.onCompleteClick(product.ordinal, product.productId, product.isComplete, vm.currentOrder.id)"></md-checkbox>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td hidden>{{vm.currentOrder.id}}</td>
+                                    <td></td>
+                                    <td></td>
+                                    <td>
+                                        <md-checkbox md-no-ink aria-label="Checkbox No Ink" ng-model="vm.isOrderComplete"
+                                                     class="md-primary"
+                                                     ng-click="vm.checkIfOrderCompleted(vm.currentOrder.id, vm.isOrderComplete)"></md-checkbox>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+
+                        </div>
+                    </md-content>
+                </md-tab>
+
+
+                <md-tab label="Assigned orders">
+                    <md-content class="md-padding">
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                <tr>
+                                    <th>
+                            <span class="glyphicon glyphicon-bookmark">
+                                <md-tooltip>
+                                    Id
+                                </md-tooltip>
+                            </span>
+                                    </th>
+                                    <th>
+                            <span class="glyphicon glyphicon-stats">
+                                <md-tooltip>
+                                    Status
+                                </md-tooltip>
+                            </span>
+                                    </th>
+                                    <th></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr ng-repeat="order in vm.orders | executorAndStatuses: 'Assigned' : 'Realize' : 'Pause' : vm.userProps.userId">
+                                    <td>{{order.id}}</td>
+                                    <td>{{order.status}}</td>
+                                    <td>
+                                        <a href="" name="{{order.status === 'Realize' ? 'pauseOrder' : 'realizeOrder'}}"
+                                           ng-click="vm.processOrder($event, order, false, vm.currentOrder)">
+                                            <span class="{{order.status === 'Realize' ? 'glyphicon glyphicon-pause' : 'glyphicon glyphicon-play'}}">
+                                                <md-tooltip>
+                                                    Realize order
+                                                </md-tooltip>
+                                            </span>
+                                        </a>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </md-content>
+                </md-tab>
+
+
+            </md-tabs>
+        </md-dialog-content>
+
+        <md-dialog-actions layout="row">
+            <md-button class="md-raised md-primary" target="_blank" md-autofocus
+                       name="finishOrder" ng-disabled="!vm.isOrderComplete"
+                       ng-click="vm.processOrder($event, vm.currentOrder, true, vm.currentOrder)">
+                Complete current order
+            </md-button>
+            <span flex></span>
+            <md-button class="md-raised" ng-click="vm.onCloseClick()">Close</md-button>
+        </md-dialog-actions>
+</md-dialog>

@@ -1,0 +1,25 @@
+<md-dialog aria-label="Cart products" ng-controller="CustomerCartController as vm">
+
+    <md-toolbar>
+        <div class="md-toolbar-tools">
+            <h2>Cart</h2>
+            <span flex></span>
+            <md-button class="md-icon-button" ng-click="vm.onCloseClick()">
+                <md-icon md-svg-src="img/ic_close_24px.svg" aria-label="Close dialog"></md-icon>
+            </md-button>
+        </div>
+    </md-toolbar>
+
+    <md-dialog-content ng-cloak>
+        <div class="md-dialog-content">
+
+            <ngcart-cart></ngcart-cart>
+
+        </div>
+    </md-dialog-content>
+
+    <md-dialog-actions>
+        <md-button class="md-raised md-warn" ng-click="vm.onCancelClick()">Cancel</md-button>
+        <ngcart-checkout service="http" settings="httpSettings"></ngcart-checkout>
+    </md-dialog-actions>
+</md-dialog>

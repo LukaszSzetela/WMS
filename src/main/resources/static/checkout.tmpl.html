@@ -1,0 +1,9 @@
+<div ng-if="service=='http' || service == 'log'">
+    <md-button class="md-raised md-primary" ng-click="checkout()" ng-disabled="!ngCart.getTotalItems()">Confirm</md-button>
+</div>
+<growl-notification ng-show="ngCart.showPositiveNotification">
+    Added new order
+</growl-notification>
+<growl-notification ng-show="ngCart.showNegativeNotification">
+    Error during adding order
+</growl-notification>

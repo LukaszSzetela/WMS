@@ -1,0 +1,16 @@
+<div ng-hide="attrs.id">
+    <a class="btn btn-lg btn-primary" ng-disabled="true" ng-transclude></a>
+
+</div>
+<div ng-show="attrs.id">
+    <div>
+        <md-input-container class="add md-icon-float md-icon-right md-block" ng-show="quantityMax">
+            <input ng-model="q" type="number" step="1" min="1" name="quantity" id="quantity" class="quantity" aria-label="numberToAdd">
+        </md-input-container>
+        <md-button class="add md-raised md-primary"
+           ng-click="ngCart.addItem(id, name, price, q, data)">Add to Cart</md-button>
+        <mark ng-show="inCart()">
+            <span ng-click="ngCart.removeItemById(id)" class="removeFromCart glyphicon glyphicon-remove"></span>
+        </mark>
+    </div>
+</div>

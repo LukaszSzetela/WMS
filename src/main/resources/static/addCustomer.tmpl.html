@@ -1,0 +1,102 @@
+<md-dialog aria-label="Add customer" ng-controller="UserController as vm">
+
+    <growl-notification ng-if="vm.showSuccessAddedCustomer">
+        Added new customer
+    </growl-notification>
+
+    <md-toolbar>
+        <div class="md-toolbar-tools">
+            <h2>Add customer</h2>
+            <span flex></span>
+            <md-button class="md-icon-button" ng-click="vm.onCancelClick()">
+                <md-icon md-svg-src="img/ic_close_24px.svg" aria-label="Close dialog"></md-icon>
+            </md-button>
+        </div>
+    </md-toolbar>
+
+    <md-dialog-content ng-cloak>
+        <div class="md-dialog-content">
+            <md-autocomplete
+                    md-selected-item="vm.selectedItem"
+                    md-search-text="vm.searchText"
+                    md-items="user in vm.querySearchForCustomerUser(vm.searchText)"
+                    md-item-text="user"
+                    md-min-length="0"
+                    placeholder="Add client for user with role of customer"
+                    md-selected-item-change="vm.onChangeUserForCustomer(vm.selectedItem)"
+                    md-autofocus>
+                <md-item-template>
+                    <span md-highlight-text="vm.searchText" md-highlight-flags="^i">{{user}}</span>
+                </md-item-template>
+                <md-not-found>
+                    No user matching "{{vm.searchText}}" were found.
+                </md-not-found>
+            </md-autocomplete>
+
+            <br>
+            <form ng-submit="$event.preventDefault()" method="post" name="form" novalidate>
+                <input hidden type="number" name="customerId" ng-model="vm.customer.customerId" required="">
+                <input hidden type="number" name="userId" ng-model="vm.customer.userId" required="">
+                <md-input-container>
+                    <label>Name</label>
+                    <input type="text" name="name" class="form-control " ng-model="vm.customer.name"
+                           placeholder="Name" autofocus required="">
+                    <div ng-show="form.$submitted || form.name.$touched">
+                        <div ng-show="form.name.$error.required">Required</div>
+                    </div>
+                </md-input-container>
+                <md-input-container>
+                    <label>Nip</label>
+                    <input type="text" name="nip" class="form-control" ng-model="vm.customer.nip"
+                           placeholder="nip" autofocus required="">
+                    <div ng-show="form.$submitted || form.nip.$touched">
+                        <div ng-show="form.nip.$error.required">Required</div>
+                    </div>
+                </md-input-container>
+                <br>
+                <md-input-container>
+                    <label>Regon</label>
+                    <input type="text" name="regon" class="form-control" ng-model="vm.customer.regon"
+                           placeholder="Regon" autofocus required="">
+                    <div ng-show="form.$submitted || form.regon.$touched">
+                        <div ng-show="form.regon.$error.required">Required</div>
+                    </div>
+                </md-input-container>
+                <md-input-container>
+                    <label>Delivery cost</label>
+                    <input type="number" name="deliveryCost" class="form-control" ng-model="vm.customer.deliveryCost"
+                           placeholder="Delivery cost" autofocus required="" min="1">
+                    <div ng-show="form.$submitted || form.deliveryCost.$touched">
+                        <div ng-show="form.deliveryCost.$error.required">Required</div>
+                    </div>
+                </md-input-container>
+                <br>
+                <md-input-container>
+                    <label>Email</label>
+                    <input type="email" name="email" class="form-control" ng-model="vm.customer.email"
+                           placeholder="Email" autofocus required="">
+                    <div ng-show="form.$submitted || form.email.$touched">
+                        <div ng-show="form.email.$error.required">Required</div>
+                        <div ng-show="form.email.$error.email">Required</div>
+                    </div>
+                </md-input-container>
+                <md-input-container>
+                    <label>Vat rate</label>
+                    <input type="number" name="vatRate" class="form-control" ng-model="vm.customer.vatRate"
+                           placeholder="Vat rate" autofocus required="" min="0" max="1" step="0.01">
+                    <div ng-show="form.$submitted || form.vatRate.$touched">
+                        <div ng-show="form.vatRate.$error.required">Required</div>
+                    </div>
+                </md-input-container>
+            </form>
+        </div>
+    </md-dialog-content>
+
+    <md-dialog-actions>
+        <md-button aria-label="Finished" ng-click="vm.onCloseClick()">Cancel</md-button>
+        <md-button class="md-raised md-primary"
+                   ng-click="vm.saveCustomer(vm.customer)"
+                   ng-disabled="form.name.$error.required || form.nip.$error.required ||
+               form.regon.$error.required || form.deliveryCost.$error.required || form.email.$error.required || form.vatRate.$error.required || form.userId.$error.required">Create customer</md-button>
+    </md-dialog-actions>
+</md-dialog>

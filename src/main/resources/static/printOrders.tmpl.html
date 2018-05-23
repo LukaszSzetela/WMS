@@ -1,0 +1,35 @@
+<md-dialog aria-label="Print orders" ng-controller="OrderController as vm">
+
+    <md-toolbar>
+        <div class="md-toolbar-tools">
+            <h2>Export orders by statuses</h2>
+            <span flex></span>
+            <md-button class="md-icon-button" ng-click="vm.onCloseClick()">
+                <md-icon md-svg-src="img/ic_close_24px.svg" aria-label="Close dialog"></md-icon>
+            </md-button>
+        </div>
+    </md-toolbar>
+
+    <md-dialog-content ng-cloak>
+        <div class="md-dialog-content">
+                    <md-checkbox aria-label="Select All"
+                                 ng-checked="isChecked()"
+                                 md-indeterminate="isIndeterminate()"
+                                 ng-click="toggleAllStatuses()">
+                        <span ng-if="isChecked()">Un-</span>Select All
+                    </md-checkbox>
+                <div class="demo-select-all-checkboxes" flex="100" ng-repeat="item in items">
+                    <md-checkbox ng-checked="exists(item, selected)" ng-click="toggleStatus(item, selected)">
+                        {{ item }}
+                    </md-checkbox>
+                </div>
+        </div>
+    </md-dialog-content>
+
+    <md-dialog-actions>
+        <md-button class="md-raised md-primary"
+                   ng-disabled="selected.length === 0"
+                   ng-click="vm.print()">Print
+        </md-button>
+    </md-dialog-actions>
+</md-dialog>
